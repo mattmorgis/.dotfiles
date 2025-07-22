@@ -1,0 +1,14 @@
+[includeIf "gitdir:~/Developer/work/"]
+    path = ~/.config/git/gitconfig-work
+
+[include]
+    path = ~/.config/git/gitconfig-personal
+
+[core]
+    editor = code --wait
+
+[init]
+    defaultbranch = main
+
+[push]
+    autosetupremote = true
