@@ -6,7 +6,7 @@ echo "Installing dotfiles..."
 
 # zsh
 ln -sf "$DOTFILES_DIR/zsh/zshenv" "$HOME/.zshenv"
-ln -sf "$DOTFILES_DIR/zsh/zprofile" "$HOME/.zprofile" 
+ln -sf "$DOTFILES_DIR/zsh/zprofile" "$HOME/.zprofile"
 ln -sf "$DOTFILES_DIR/zsh/zshrc" "$HOME/.zshrc"
 ln -sf "$DOTFILES_DIR/zfunc" "$HOME/.zfunc"
 
@@ -21,7 +21,7 @@ ln -sf "$DOTFILES_DIR/config/aerospace/aerospace.toml" "$HOME/.config/aerospace/
 mkdir -p "$HOME/.config/ghostty"
 ln -sf "$DOTFILES_DIR/config/ghostty/config" "$HOME/.config/ghostty/config"
 
-# git 
+# git
 mkdir -p "$HOME/.config/git"
 ln -sf "$DOTFILES_DIR/git/gitconfig" "$HOME/.gitconfig"
 

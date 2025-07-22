@@ -18,7 +18,7 @@ for branch in $(git branch | grep -v '^\*' | grep -v '^+' | sed 's/^ *//'); do
     if [[ "$branch" == "$current_branch" ]]; then
         continue
     fi
-    
+
     # Check if remote branch exists
     if ! git show-ref --verify --quiet "refs/remotes/origin/$branch"; then
         branches_to_delete+=("$branch")

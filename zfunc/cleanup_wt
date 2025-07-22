@@ -35,9 +35,9 @@ case $action in
         cd "$main_repo_path"
         local target_branch=$(git branch --show-current)
         cd "$worktree_path"
-        
+
         echo "Merging '$current_branch' into '$target_branch'..."
-        
+
         if git push origin "$current_branch"; then
             cd "$main_repo_path"
             if git pull && git merge "$current_branch"; then
