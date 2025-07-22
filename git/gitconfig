@@ -1,8 +1,8 @@
-[includeIf "gitdir:~/Developer/work/"]
-    path = ~/.config/git/gitconfig-work
-
 [include]
     path = ~/.config/git/gitconfig-personal
+
+[includeIf "gitdir:~/Developer/work/"]
+    path = ~/.config/git/gitconfig-work
 
 [core]
     editor = code --wait
