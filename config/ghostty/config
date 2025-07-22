@@ -1,0 +1,12 @@
+background-opacity = .85
+theme = catppuccin-frappe
+window-height = 25
+window-width = 160
+
+font-family = Meslo LG M for Powerline
+font-size = 16
+
+copy-on-select = clipboard
+
+# window-inherit-working-directory = false
+keybind = shift+enter=text:\n

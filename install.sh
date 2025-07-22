@@ -17,6 +17,10 @@ ln -sf "$DOTFILES_DIR/config/starship.toml" "$HOME/.config/starship.toml"
 mkdir -p "$HOME/.config/aerospace"
 ln -sf "$DOTFILES_DIR/config/aerospace/aerospace.toml" "$HOME/.config/aerospace/aerospace.toml"
 
+# ghostty
+mkdir -p "$HOME/.config/ghostty"
+ln -sf "$DOTFILES_DIR/config/ghostty/config" "$HOME/.config/ghostty/config"
+
 # git 
 mkdir -p "$HOME/.config/git"
 ln -sf "$DOTFILES_DIR/git/gitconfig" "$HOME/.gitconfig"
