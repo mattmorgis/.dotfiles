@@ -1,0 +1,20 @@
+if [ $# -eq 0 ]; then
+    echo "Available worktrees:"
+    git worktree list
+    echo ""
+    echo "Usage: switch_worktree <path-or-branch-name>"
+    return 1
+fi
+
+local target="$1"
+
+# Try to find worktree by branch name or path
+local worktree_path=$(git worktree list | grep -E "(^|/)$target(\s|$)" | awk '{print $1}' | head -1)
+
+if [ -n "$worktree_path" ] && [ -d "$worktree_path" ]; then
+    cd "$worktree_path"
+    echo "Switched to worktree: $worktree_path"
+else
+    echo "Worktree not found: $target"
+    return 1
+fi

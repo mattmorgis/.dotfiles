@@ -1,0 +1,14 @@
+# Look for .venv in current directory first, then walk up the tree
+local current_dir="$PWD"
+
+while [ "$current_dir" != "/" ]; do
+    if [ -f "$current_dir/.venv/bin/activate" ]; then
+        echo "Activating virtual environment at: $current_dir/.venv"
+        source "$current_dir/.venv/bin/activate"
+        return 0
+    fi
+    current_dir="$(dirname "$current_dir")"
+done
+
+echo "No .venv/bin/activate found in current directory or parent directories"
+return 1

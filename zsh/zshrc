@@ -1,0 +1,15 @@
+# Interactive shell configuration
+eval "$(starship init zsh)"
+
+# Aliases
+alias python=python3
+alias pyc='py_check'
+alias gc='git_cleanup'
+
+# zsh auto-completion system - point to dotfiles zfunc
+fpath+="$HOME/.dotfiles/zfunc"
+autoload -Uz compinit; compinit
+zstyle ':completion:*' menu select
+
+# Autoload all custom functions
+autoload -Uz create_wt cleanup_wt list_worktrees switch_worktree venv py_check git_cleanup
