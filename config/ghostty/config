@@ -10,3 +10,5 @@ copy-on-select = clipboard
 
 # window-inherit-working-directory = false
 keybind = shift+enter=text:\n
+
+macos-titlebar-style = tabs
