@@ -1,57 +1,59 @@
-# Check if we're in a git repository
-if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-    echo "Error: Not in a git repository"
-    return 1
-fi
+create_wt() {
+    # Check if we're in a git repository
+    if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+        echo "Error: Not in a git repository"
+        return 1
+    fi
 
-# Check if branch name is provided
-if [ $# -eq 0 ]; then
-    echo "Usage: create_worktree <branch-name> [worktree-directory]"
-    echo "Example: create_worktree feature/new-feature"
-    echo "Example: create_worktree feature/new-feature ../my-worktree"
-    return 1
-fi
+    # Check if branch name is provided
+    if [ $# -eq 0 ]; then
+        echo "Usage: create_worktree <branch-name> [worktree-directory]"
+        echo "Example: create_worktree feature/new-feature"
+        echo "Example: create_worktree feature/new-feature ../my-worktree"
+        return 1
+    fi
 
-local BRANCH_NAME="$1"
-local WORKTREE_DIR="${2:-../$BRANCH_NAME}"  # Use second argument or default to ../branch-name
+    local BRANCH_NAME="$1"
+    local WORKTREE_DIR="${2:-../$BRANCH_NAME}"  # Use second argument or default to ../branch-name
 
-echo "Creating git worktree for branch: $BRANCH_NAME"
-echo "Worktree directory: $WORKTREE_DIR"
+    echo "Creating git worktree for branch: $BRANCH_NAME"
+    echo "Worktree directory: $WORKTREE_DIR"
 
-# Create the worktree
-if ! git worktree add -b "$BRANCH_NAME" "$WORKTREE_DIR"; then
-    echo "Failed to create worktree"
-    return 1
-fi
+    # Create the worktree
+    if ! git worktree add -b "$BRANCH_NAME" "$WORKTREE_DIR"; then
+        echo "Failed to create worktree"
+        return 1
+    fi
 
-# Copy .env file if it exists
-if [ -f ".env" ]; then
-    echo "Copying .env file to worktree..."
-    cp .env "$WORKTREE_DIR/"
-else
-    echo "Warning: .env file not found in main repo"
-fi
+    # Copy .env file if it exists
+    if [ -f ".env" ]; then
+        echo "Copying .env file to worktree..."
+        cp .env "$WORKTREE_DIR/"
+    else
+        echo "Warning: .env file not found in main repo"
+    fi
 
-# Change to worktree directory and sync dependencies
-echo "Changing to worktree directory and syncing dependencies..."
-cd "$WORKTREE_DIR"
+    # Change to worktree directory and sync dependencies
+    echo "Changing to worktree directory and syncing dependencies..."
+    cd "$WORKTREE_DIR"
 
-# Run uv sync
-echo "Running uv sync..."
-uv sync
+    # Run uv sync
+    echo "Running uv sync..."
+    uv sync
 
-# Activate virtual environment
-if [ -f ".venv/bin/activate" ]; then
-    echo "Activating virtual environment..."
-    source .venv/bin/activate
-else
-    echo "Warning: .venv/bin/activate not found"
-fi
+    # Activate virtual environment
+    if [ -f ".venv/bin/activate" ]; then
+        echo "Activating virtual environment..."
+        source .venv/bin/activate
+    else
+        echo "Warning: .venv/bin/activate not found"
+    fi
 
-clear
+    clear
 
-echo "Worktree setup complete!"
-echo "Worktree location: $(pwd)"
-echo "Branch: $BRANCH_NAME"
-echo ""
-echo "You are now in the new worktree!"
+    echo "Worktree setup complete!"
+    echo "Worktree location: $(pwd)"
+    echo "Branch: $BRANCH_NAME"
+    echo ""
+    echo "You are now in the new worktree!"
+}

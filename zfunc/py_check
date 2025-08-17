@@ -1,11 +1,13 @@
-echo "Running ruff check --fix..."
-uv run ruff check --fix || return 1
+py_check() {
+  echo "Running ruff check --fix..."
+  uv run ruff check --fix || return 1
 
-echo "Running ruff format..."
-uv run ruff format || return 1
+  echo "Running ruff format..."
+  uv run ruff format || return 1
 
-echo "Running mypy..."
-uv run mypy . || return 1
+  echo "Running mypy..."
+  uv run mypy . || return 1
 
-echo "Running pytest..."
-uv run pytest || return 1
+  echo "Running pytest..."
+  uv run pytest || return 1
+}

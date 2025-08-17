@@ -1,2 +1,4 @@
-echo "Git worktrees:"
-git worktree list
+list_worktrees() {
+  echo "Git worktrees:"
+  git worktree list
+}
