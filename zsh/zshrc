@@ -5,6 +5,19 @@ eval "$(starship init zsh)"
 alias python=python3
 alias pyc='py_check'
 alias gc='git_cleanup'
+# Shortcuts
+alias vim='nvim'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../../'
+alias .....='cd ../../../../'
+alias l='ls -lhF -G'
+alias la='ls -lahF -G'
+alias grep='grep --color=auto '
+alias rg='rg -p '
+alias mv='mv -i'
+alias cp='cp -i'
+alias cwd='pwd | tr -d "\r\n" | pbcopy'
 
 # zsh auto-completion system - point to dotfiles zfunc
 fpath+="$HOME/.dotfiles/zfunc"
