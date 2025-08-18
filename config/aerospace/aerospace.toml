@@ -232,6 +232,10 @@ if.app-id = 'com.apple.Music'
 run = ['layout floating', 'move-node-to-workspace 6']
 
 [[on-window-detected]]
+if.app-id = 'com.cisco.anyconnect.gui'
+run = ['layout floating', 'move-node-to-workspace 6']
+
+[[on-window-detected]]
 if.app-id = 'com.luckymarmot.Paw'
 run = 'move-node-to-workspace 7'
 
