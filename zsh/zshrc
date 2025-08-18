@@ -25,4 +25,4 @@ autoload -Uz compinit; compinit
 zstyle ':completion:*' menu select
 
 # Autoload all custom functions
-autoload -Uz create_wt cleanup_wt list_worktrees switch_worktree venv py_check git_cleanup
+autoload -Uz create_wt cleanup_wt list_worktrees switch_worktree venv py_check git_cleanup azconnect

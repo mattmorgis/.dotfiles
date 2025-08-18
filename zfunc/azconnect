@@ -1,0 +1,33 @@
+local env=$1
+
+if [[ -z "$env" ]]; then
+  echo "Usage: azconnect [dev|prod]"
+  return 1
+fi
+
+[[ -f ~/.dotfiles/.azure-config.local ]] && source ~/.dotfiles/.azure-config.local
+
+if ! az account show &>/dev/null; then
+  echo "Not logged into Azure, logging in..."
+  az login
+fi
+
+case $env in
+  dev)
+    # echo "DEBUG: RG=$AZ_DEV_RG, CLUSTER: $AZ_DEV_CLUSTER, SUB: $AZ_DEV_SUBSCRIPTION"
+    [[ -n "$AZ_DEV_SUBSCRIPTION" ]] && az account set --subscription "$AZ_DEV_SUBSCRIPTION"
+    az aks get-credentials --resource-group "$AZ_DEV_RG" --name "$AZ_DEV_CLUSTER"
+    ;;
+  prod)
+    # echo "DEBUG: RG=$AZ_PROD_RG, CLUSTER: $AZ_PROD_CLUSTER, SUB: $AZ_PROD_SUBSCRIPTION"
+    [[ -n "$AZ_PROD_SUBSCRIPTION" ]] && az account set --subscription "$AZ_PROD_SUBSCRIPTION"
+    az aks get-credentials --resource-group "$AZ_PROD_RG" --name "$AZ_PROD_CLUSTER"
+    ;;
+  *)
+    echo "Unknown environment: $env"
+    return 1
+    ;;
+esac
+
+echo "Connected to $env cluster"
+kubectl config current-context
