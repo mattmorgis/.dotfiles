@@ -1,10 +1,7 @@
-background-opacity = .85
 theme = catppuccin-frappe
-window-height = 25
-window-width = 160
 
-font-family = Meslo LG M for Powerline
-font-size = 16
+font-family = Hack Nerd Font Mono
+font-size = 18
 
 copy-on-select = clipboard
 
