@@ -212,6 +212,7 @@ if.app-id = 'com.microsoft.VSCode'
 run = 'move-node-to-workspace 2'
 
 [[on-window-detected]]
+# Cursor
 if.app-id = 'com.todesktop.230313mzl4w4u92'
 run = 'move-node-to-workspace 2'
 
@@ -220,11 +221,11 @@ if.app-id = 'com.mitchellh.ghostty'
 run = 'move-node-to-workspace 3'
 
 [[on-window-detected]]
-if.app-id = 'com.anthropic.claudefordesktop'
+if.app-id = 'com.apple.Safari.WebApp.97DBD4BA-E996-4122-85E8-4A78164B9BB3'
 run = 'move-node-to-workspace 4'
 
 [[on-window-detected]]
-if.app-id = 'com.openai.chat'
+if.app-id = 'com.apple.Safari.WebApp.73BFED9B-219F-4E13-A66C-D5EE757DC8F9'
 run = 'move-node-to-workspace 5'
 
 [[on-window-detected]]
