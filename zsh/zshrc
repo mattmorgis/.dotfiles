@@ -1,3 +1,5 @@
+set -o vi
+
 # Interactive shell configuration
 eval "$(starship init zsh)"
 
