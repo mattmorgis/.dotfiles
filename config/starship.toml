@@ -5,6 +5,11 @@
 [line_break]
 disabled = true
 
-# Replace the "❯" symbol in the prompt with "➜"
 [character]
-success_symbol = "[➜](bold green)"
+success_symbol = '[\[I\] ➜](bold green)'
+vimcmd_symbol = '[\[N\] ➜](bold green)'
+# These don't work in zsh yet, but maybe one day they will.
+# https://github.com/starship/starship/issues/625#issuecomment-732454148
+vimcmd_replace_one_symbol = '[\[R\] ➜](bold green)'
+vimcmd_replace_symbol = '[\[R\] ➜](bold green)'
+vimcmd_visual_symbol = '[V]](bold green)'
