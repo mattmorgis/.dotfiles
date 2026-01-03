@@ -21,6 +21,9 @@ ln -sf "$DOTFILES_DIR/config/aerospace/aerospace.toml" "$HOME/.config/aerospace/
 mkdir -p "$HOME/.config/ghostty"
 ln -sf "$DOTFILES_DIR/config/ghostty/config" "$HOME/.config/ghostty/config"
 
+# neovim
+ln -s "$DOTFILES_DIR/config/nvim" "$HOME/.config/nvim"
+
 # git
 mkdir -p "$HOME/.config/git"
 ln -sf "$DOTFILES_DIR/git/gitconfig" "$HOME/.gitconfig"
