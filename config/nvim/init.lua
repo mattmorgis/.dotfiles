@@ -137,6 +137,7 @@ rtp:prepend(lazypath)
 require('lazy').setup({
   {
     'shaunsingh/nord.nvim',
+    priority = 1000,
     config = function()
       vim.g.nord_italic = false
       vim.g.nord_bold = false
@@ -156,7 +157,6 @@ require('lazy').setup({
         build = 'make',
       },
       { 'nvim-telescope/telescope-ui-select.nvim' },
-      -- { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -166,20 +166,15 @@ require('lazy').setup({
       -- Two important keymaps to use while in Telescope are:
       --  - Insert mode: <c-/>
       --  - Normal mode: ?
-      --
-      -- This opens a window that shows you all of the keymaps for the current
-      -- Telescope picker. This is really useful to discover what Telescope can
-      -- do as well as how to actually do it!
-
-      -- [[ Configure Telescope ]]
-      -- See `:help telescope` and `:help telescope.setup()`
       require('telescope').setup {
+        defaults = require('telescope.themes').get_ivy(),
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
           },
         },
       }
+
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
 
@@ -206,4 +201,104 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
     end,
   },
+  -- Highlight, edit, and navigate code
+  {
+    'nvim-treesitter/nvim-treesitter',
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter-textobjects'
+    },
+    branch = 'master',
+    build = ':TSUpdate',
+    main = 'nvim-treesitter.configs',
+    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
+    opts = {
+      ensure_installed = {
+        'bash',
+        'c',
+        'css',
+        'diff',
+        'html',
+        'javascript',
+        'json',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'python',
+        'query',
+        'terraform',
+        'toml',
+        'typescript',
+        'vim',
+        'vimdoc',
+        'yaml'
+      },
+      auto_install = false,
+      incremental_selection = {
+        enable = true,
+        keymaps = {
+          init_selection = ",", -- maps in normal mode to init the node/scope selection with space
+          node_incremental = ",", -- increment to the upper named parent
+          node_decremental = "<bs>", -- decrement to the previous node
+          scope_incremental = "<tab>", -- increment to the upper scope
+        },
+      },
+      highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = false,
+      },
+      indent = {
+        enable = true,
+      },
+      textobjects = {
+        move = {
+          enable = true,
+          set_jumps = true,
+          goto_next_start = {
+            [']]'] = '@function.outer',
+          },
+          goto_next_end = {
+            [']['] = '@function.outer',
+          },
+          goto_previous_start = {
+            ['[['] = '@function.outer',
+          },
+          goto_previous_end = {
+            ['[]'] = '@function.outer',
+          },
+        },
+        swap = {
+          enable = true,
+          swap_next = {
+            ['<leader>sn'] = '@parameter.inner',
+          },
+          swap_previous = {
+            ['<leader>sp'] = '@parameter.inner',
+          },
+        },
+      },
+    },
+  },
+  -- Show current context
+  {
+		"nvim-treesitter/nvim-treesitter-context",
+		after = "nvim-treesitter",
+		config = function()
+			require("treesitter-context").setup({
+				enable = true,
+				multiwindow = false, -- Enable multiwindow support.
+				max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
+				min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+				line_numbers = true,
+				multiline_threshold = 20, -- Maximum number of lines to show for a single context
+				trim_scope = "outer", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+				mode = "cursor", -- Line used to calculate context. Choices: 'cursor', 'topline'
+				-- Separator between context and content. Should be a single character string, like '-'.
+				-- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
+				separator = nil,
+				zindex = 20, -- The Z-index of the context window
+				on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
+			})
+		end,
+	},
 })
