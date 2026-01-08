@@ -104,22 +104,6 @@ vim.keymap.set('n', '<Leader>fp', function()
   print('Copied to clipboard: ' .. path)
 end, { silent = true })
 
--- Autocmds
-
-local augroup = vim.api.nvim_create_augroup
-local autocmd = vim.api.nvim_create_autocmd
-
-local personal_group = augroup('personal', {})
-local yank_group = augroup('HighlightYank', {})
-
-autocmd('TextYankPost', {
-  desc = 'Highlight when yanking (copying) text',
-  group = yank_group,
-  callback = function()
-    vim.hl.on_yank()
-  end,
-})
-
 -- Plugins
 
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -135,17 +119,23 @@ local rtp = vim.opt.rtp
 rtp:prepend(lazypath)
 
 require('lazy').setup({
+  -- {
+  --   'shaunsingh/nord.nvim',
+  --   priority = 1000,
+  --   config = function()
+  --     vim.g.nord_italic = false
+  --     vim.g.nord_bold = false
+  --     vim.cmd [[colorscheme nord]]
+  --   end
+  -- },
   {
-    'shaunsingh/nord.nvim',
+    'nordtheme/vim',
     priority = 1000,
     config = function()
-      vim.g.nord_italic = false
-      vim.g.nord_bold = false
       vim.cmd [[colorscheme nord]]
     end
   },
   'lewis6991/gitsigns.nvim',
-  'numToStr/Comment.nvim',
   -- Fuzzy Finder (files, lsp, etc)
   {
     'nvim-telescope/telescope.nvim',
@@ -237,9 +227,9 @@ require('lazy').setup({
       incremental_selection = {
         enable = true,
         keymaps = {
-          init_selection = ",", -- maps in normal mode to init the node/scope selection with space
-          node_incremental = ",", -- increment to the upper named parent
-          node_decremental = "<bs>", -- decrement to the previous node
+          init_selection = ",",        -- maps in normal mode to init the node/scope selection with space
+          node_incremental = ",",      -- increment to the upper named parent
+          node_decremental = "<bs>",   -- decrement to the previous node
           scope_incremental = "<tab>", -- increment to the upper scope
         },
       },
@@ -281,24 +271,80 @@ require('lazy').setup({
   },
   -- Show current context
   {
-		"nvim-treesitter/nvim-treesitter-context",
-		after = "nvim-treesitter",
-		config = function()
-			require("treesitter-context").setup({
-				enable = true,
-				multiwindow = false, -- Enable multiwindow support.
-				max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
-				min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
-				line_numbers = true,
-				multiline_threshold = 20, -- Maximum number of lines to show for a single context
-				trim_scope = "outer", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
-				mode = "cursor", -- Line used to calculate context. Choices: 'cursor', 'topline'
-				-- Separator between context and content. Should be a single character string, like '-'.
-				-- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
-				separator = nil,
-				zindex = 20, -- The Z-index of the context window
-				on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
-			})
-		end,
-	},
+    "nvim-treesitter/nvim-treesitter-context",
+    dependencies = "nvim-treesitter",
+    config = function()
+      require("treesitter-context").setup({
+        enable = true,
+        multiwindow = false,  -- Enable multiwindow support.
+        max_lines = 0,        -- How many lines the window should span. Values <= 0 mean no limit.
+        min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+        line_numbers = true,
+        multiline_threshold = 20, -- Maximum number of lines to show for a single context
+        trim_scope = "outer", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+        mode = "cursor",      -- Line used to calculate context. Choices: 'cursor', 'topline'
+        -- Separator between context and content. Should be a single character string, like '-'.
+        -- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
+        separator = nil,
+        zindex = 20, -- The Z-index of the context window
+        on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
+      })
+    end,
+  },
 })
+
+-- Autocmds
+
+local augroup = vim.api.nvim_create_augroup
+local autocmd = vim.api.nvim_create_autocmd
+
+local yank_group = augroup('HighlightYank', {})
+
+autocmd('TextYankPost', {
+  desc = 'Highlight when yanking (copying) text',
+  group = yank_group,
+  callback = function()
+    vim.hl.on_yank()
+  end,
+})
+
+-- LSP Setup
+autocmd('LspAttach', {
+  group = augroup('lsp-attach', { clear = true }),
+  callback = function(event)
+    local map = function(keys, func, desc)
+      vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
+    end
+
+    local builtin = require('telescope.builtin')
+
+    -- map('gd', builtin.lsp_definitions, '[G]oto [D]efinition')
+    -- map('gr', builtin.lsp_references, '[G]oto [R]eferences')
+    -- map('gI', builtin.lsp_implementations, '[G]oto [I]mplementation')
+
+    map('grd', builtin.lsp_definitions, '[G]oto [D]efinition')
+    map('grr', builtin.lsp_references, '[G]oto [R]eferences')
+    map('gri', builtin.lsp_implementations, '[G]oto [I]mplementation')
+    map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+    map('grt', builtin.lsp_type_definitions, '[G]oto [T]ype Definition')
+    map('[d', vim.diagnostic.goto_prev, 'Previous Diagnostic')
+    map(']d', vim.diagnostic.goto_next, 'Next Diagnostic')
+
+    map('K', vim.lsp.buf.hover, 'Hover Documentation')
+
+    -- Code actions and refactoring
+    map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+    map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+
+    -- Format
+    map('<leader>f', vim.lsp.buf.format, '[F]ormat')
+  end,
+})
+
+local servers = {
+  'clangd','lua_ls'
+}
+
+for _, server in ipairs(servers) do
+  vim.lsp.enable(server)
+end
