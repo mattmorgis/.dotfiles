@@ -1,7 +1,6 @@
 -- https://arslan.io/2023/05/10/the-benefits-of-using-a-single-init-lua-vimrc-file/
 
 -- Settings
-
 -- Set <space> as the leader key
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
@@ -38,6 +37,9 @@ if vim.fn.getenv("TERM_PROGRAM") == "ghostty" then
   vim.opt.title = true
   vim.opt.titlestring = "nvim: %{expand('%:t')}"
 end
+
+vim.opt.completeopt:append({ "menuone", "noselect", "popup", "fuzzy" })
+vim.diagnostic.config({virtual_text = true})
 
 -- Keymaps
 
@@ -104,6 +106,18 @@ vim.keymap.set('n', '<Leader>fp', function()
   print('Copied to clipboard: ' .. path)
 end, { silent = true })
 
+vim.keymap.set('n', 'gK', function()
+  local config = vim.diagnostic.config() or {}
+  local state = (config.virtual_text and 1) or (config.virtual_lines and 2) or 0
+  local next_state = (state + 1) % 3
+
+  vim.diagnostic.config({
+    virtual_text = next_state == 1,
+    virtual_lines = next_state == 2
+  })
+end, { desc = 'Cycle diagnostic display modes' })
+
+
 -- Plugins
 
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -119,15 +133,6 @@ local rtp = vim.opt.rtp
 rtp:prepend(lazypath)
 
 require('lazy').setup({
-  -- {
-  --   'shaunsingh/nord.nvim',
-  --   priority = 1000,
-  --   config = function()
-  --     vim.g.nord_italic = false
-  --     vim.g.nord_bold = false
-  --     vim.cmd [[colorscheme nord]]
-  --   end
-  -- },
   {
     'nordtheme/vim',
     priority = 1000,
@@ -276,21 +281,78 @@ require('lazy').setup({
     config = function()
       require("treesitter-context").setup({
         enable = true,
-        multiwindow = false,  -- Enable multiwindow support.
-        max_lines = 0,        -- How many lines the window should span. Values <= 0 mean no limit.
-        min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+        multiwindow = false,
+        max_lines = 0,
+        min_window_height = 0,
         line_numbers = true,
-        multiline_threshold = 20, -- Maximum number of lines to show for a single context
-        trim_scope = "outer", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
-        mode = "cursor",      -- Line used to calculate context. Choices: 'cursor', 'topline'
-        -- Separator between context and content. Should be a single character string, like '-'.
-        -- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
+        multiline_threshold = 20,
+        trim_scope = "outer",
+        mode = "cursor",
         separator = nil,
-        zindex = 20, -- The Z-index of the context window
-        on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
+        zindex = 20,
+        on_attach = nil,
       })
     end,
   },
+  {
+    'hrsh7th/nvim-cmp',
+    event = 'InsertEnter',
+    dependencies = {
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-path',
+    },
+    config = function()
+      local cmp = require('cmp')
+
+      cmp.setup({
+        snippet = {
+          expand = function(args)
+            vim.snippet.expand(args.body)
+          end,
+        },
+        formatting = {
+          expandable_indicator = true,
+          format = function(entry, item)
+            local menu = {
+              nvim_lsp = "[LSP]",
+              buffer = "[buffer]",
+              path = "[path]"
+            }
+            item.menu = menu[entry.source.name]
+            return item
+          end
+        },
+        mapping = cmp.mapping.preset.insert({
+          ['<C-n>'] = cmp.mapping.select_next_item(),
+          ['<C-p>'] = cmp.mapping.select_prev_item(),
+          ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+          ['<C-k>'] = cmp.mapping(function(fallback)
+            if vim.snippet.active({ direction = 1 }) then
+              vim.snippet.jump(1)
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
+          ['<C-j>'] = cmp.mapping(function(fallback)
+            if vim.snippet.active({ direction = -1 }) then
+              vim.snippet.jump(-1)
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
+        }),
+        sources = {
+          { name = 'nvim_lsp' },
+          { name = 'buffer' },
+          { name = 'path' },
+        },
+        -- performance = {
+        --   max_view_entries = 20,
+        -- },
+      })
+    end,
+  }
 })
 
 -- Autocmds
@@ -316,19 +378,13 @@ autocmd('LspAttach', {
       vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
     end
 
-    local builtin = require('telescope.builtin')
-
-    -- map('gd', builtin.lsp_definitions, '[G]oto [D]efinition')
-    -- map('gr', builtin.lsp_references, '[G]oto [R]eferences')
-    -- map('gI', builtin.lsp_implementations, '[G]oto [I]mplementation')
-
-    map('grd', builtin.lsp_definitions, '[G]oto [D]efinition')
-    map('grr', builtin.lsp_references, '[G]oto [R]eferences')
-    map('gri', builtin.lsp_implementations, '[G]oto [I]mplementation')
+    map('grd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+    map('grr', vim.lsp.buf.references, '[G]oto [R]eferences')
+    map('gri', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
     map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-    map('grt', builtin.lsp_type_definitions, '[G]oto [T]ype Definition')
-    map('[d', vim.diagnostic.goto_prev, 'Previous Diagnostic')
-    map(']d', vim.diagnostic.goto_next, 'Next Diagnostic')
+    map('grt', vim.lsp.buf.type_definition, '[G]oto [T]ype Definition')
+    map('[d', function() vim.diagnostic.jump({ count = -1 }) end, 'Previous Diagnostic')
+    map(']d', function() vim.diagnostic.jump({ count = 1 }) end, 'Next Diagnostic')
 
     map('K', vim.lsp.buf.hover, 'Hover Documentation')
 
@@ -338,6 +394,15 @@ autocmd('LspAttach', {
 
     -- Format
     map('<leader>f', vim.lsp.buf.format, '[F]ormat')
+
+    -- native completions:
+    -- opted for nvm-cmp for now
+    -- local client = vim.lsp.get_client_by_id(event.data.client_id)
+    --   if client then
+    --     vim.lsp.completion.enable(true, client.id, event.buf, {
+    --       autotrigger = true,
+    --     })
+    -- end
   end,
 })
 
@@ -345,6 +410,9 @@ local servers = {
   'clangd','lua_ls'
 }
 
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
 for _, server in ipairs(servers) do
+  vim.lsp.config(server, { capabilities = capabilities })
   vim.lsp.enable(server)
 end
