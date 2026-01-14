@@ -366,7 +366,9 @@ require('lazy').setup {
   {
     'stevearc/conform.nvim',
     config = function()
-      require('conform').setup {
+      local conform = require 'conform'
+
+      conform.setup {
         formatters_by_ft = {
           lua = { 'stylua' },
           python = { 'ruff' },
@@ -375,6 +377,10 @@ require('lazy').setup {
           markdown = { 'prettier' },
         },
       }
+
+      vim.keymap.set('n', '<leader>f', function()
+        conform.format { async = true, lsp_fallback = true }
+      end, { desc = '[F]ormat' })
     end,
   },
 }
@@ -428,9 +434,6 @@ autocmd('LspAttach', {
     -- Code actions and refactoring
     map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
     map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-
-    -- Format
-    map('<leader>f', vim.lsp.buf.format, '[F]ormat')
 
     -- native completions:
     -- opted for nvm-cmp for now
