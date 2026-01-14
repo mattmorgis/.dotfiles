@@ -10,8 +10,6 @@ vim.g.have_nerd_font = true
 vim.o.number = true
 vim.o.relativenumber = true
 vim.o.mouse = 'a'
--- Don't show the mode, since it's already in the status line
-vim.o.showmode = false
 vim.o.undofile = true
 vim.o.ignorecase = true
 vim.o.smartcase = true
@@ -157,6 +155,7 @@ require('lazy').setup {
         build = 'make',
       },
       { 'nvim-telescope/telescope-ui-select.nvim' },
+      { 'nvim-telescope/telescope-frecency.nvim' },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -177,6 +176,7 @@ require('lazy').setup {
 
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
+      pcall(require('telescope').load_extension, 'frecency')
 
       local builtin = require 'telescope.builtin'
 
@@ -381,6 +381,12 @@ require('lazy').setup {
       vim.keymap.set('n', '<leader>f', function()
         conform.format { async = true, lsp_fallback = true }
       end, { desc = '[F]ormat' })
+    end,
+  },
+  {
+    'mbbill/undotree',
+    config = function()
+      vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { desc = 'Toggle undotree' })
     end,
   },
 }
