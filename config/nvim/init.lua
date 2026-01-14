@@ -41,6 +41,12 @@ end
 vim.opt.completeopt:append({ "menuone", "noselect", "popup", "fuzzy" })
 vim.diagnostic.config({virtual_text = true})
 
+vim.filetype.add({
+  filename = {
+    ['Brewfile'] = 'ruby',
+  },
+})
+
 -- Keymaps
 
 vim.keymap.set("n", "<leader>e", vim.cmd.Ex)
@@ -221,6 +227,7 @@ require('lazy').setup({
         'markdown_inline',
         'python',
         'query',
+        'ruby',
         'terraform',
         'toml',
         'typescript',
