@@ -324,9 +324,13 @@ require('lazy').setup({
           end
         },
         mapping = cmp.mapping.preset.insert({
+          -- completions
           ['<C-n>'] = cmp.mapping.select_next_item(),
           ['<C-p>'] = cmp.mapping.select_prev_item(),
           ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+          ['<C-Space>'] = cmp.mapping.complete(),
+
+          -- move through snippets
           ['<C-k>'] = cmp.mapping(function(fallback)
             if vim.snippet.active({ direction = 1 }) then
               vim.snippet.jump(1)
@@ -378,11 +382,11 @@ autocmd('LspAttach', {
       vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
     end
 
-    map('grd', vim.lsp.buf.definition, '[G]oto [D]efinition')
-    map('grr', vim.lsp.buf.references, '[G]oto [R]eferences')
-    map('gri', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
-    map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-    map('grt', vim.lsp.buf.type_definition, '[G]oto [T]ype Definition')
+    map('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+    map('gr', vim.lsp.buf.references, '[G]oto [R]eferences')
+    map('gi', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
+    map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+    map('gt', vim.lsp.buf.type_definition, '[G]oto [T]ype Definition')
     map('[d', function() vim.diagnostic.jump({ count = -1 }) end, 'Previous Diagnostic')
     map(']d', function() vim.diagnostic.jump({ count = 1 }) end, 'Next Diagnostic')
 
