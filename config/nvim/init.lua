@@ -20,7 +20,7 @@ vim.o.breakindent = true
 vim.o.signcolumn = 'yes'
 vim.o.inccommand = 'split'
 vim.o.cursorline = true
-vim.opt.colorcolumn = "80"
+vim.opt.colorcolumn = '80'
 vim.o.scrolloff = 8
 vim.o.splitright = true
 vim.o.splitbelow = true
@@ -33,36 +33,36 @@ vim.g.netrw_banner = 0
 vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
-if vim.fn.getenv("TERM_PROGRAM") == "ghostty" then
+if vim.fn.getenv 'TERM_PROGRAM' == 'ghostty' then
   vim.opt.title = true
   vim.opt.titlestring = "nvim: %{expand('%:t')}"
 end
 
-vim.opt.completeopt:append({ "menuone", "noselect", "popup", "fuzzy" })
-vim.diagnostic.config({virtual_text = true})
+vim.opt.completeopt:append { 'menuone', 'noselect', 'popup', 'fuzzy' }
+vim.diagnostic.config { virtual_text = true }
 
-vim.filetype.add({
+vim.filetype.add {
   filename = {
     ['Brewfile'] = 'ruby',
   },
-})
+}
 
 -- Keymaps
 
-vim.keymap.set("n", "<leader>e", vim.cmd.Ex)
+vim.keymap.set('n', '<leader>e', vim.cmd.Ex)
 
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = 'move text down' })
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = 'move text up' })
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { desc = 'move text down' })
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { desc = 'move text up' })
 
 -- center when navigating
-vim.keymap.set("n", "<C-d>", "<C-d>zz")
-vim.keymap.set("n", "<C-u>", "<C-u>zz")
-vim.keymap.set("n", "n", "nzzzv")
-vim.keymap.set("n", "N", "Nzzzv")
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
+vim.keymap.set('n', 'n', 'nzzzv')
+vim.keymap.set('n', 'N', 'Nzzzv')
 
 -- greatest remap ever
-vim.keymap.set("x", "<leader>p", [["_dP]], { desc = 'paste without yanking' })
-vim.keymap.set({ "n", "v" }, "<leader>d", "\"_d", { desc = 'delete without yanking' })
+vim.keymap.set('x', '<leader>p', [["_dP]], { desc = 'paste without yanking' })
+vim.keymap.set({ 'n', 'v' }, '<leader>d', '"_d', { desc = 'delete without yanking' })
 
 -- macOS
 vim.keymap.set('v', '<D-c>', '"+y', { desc = 'copy to system clipboard' })
@@ -76,9 +76,9 @@ vim.keymap.set('i', 'jj', '<ESC>', { desc = 'exit insert on jj' })
 vim.keymap.set('i', 'kk', '<ESC>', { desc = 'exit insert on kk' })
 
 -- find and replace word under cursor
-vim.keymap.set("n", "<leader>*", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+vim.keymap.set('n', '<leader>*', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 
-vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
+vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true })
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
@@ -104,9 +104,9 @@ vim.keymap.set('n', '<Leader>fp', function()
   local git_prefix = vim.fn.system('git rev-parse --show-prefix'):gsub('\n', '')
   local path
   if vim.v.shell_error == 0 then
-    path = git_prefix .. vim.fn.expand('%')
+    path = git_prefix .. vim.fn.expand '%'
   else
-    path = vim.fn.expand('%:p')
+    path = vim.fn.expand '%:p'
   end
   vim.fn.setreg('+', path)
   print('Copied to clipboard: ' .. path)
@@ -117,12 +117,11 @@ vim.keymap.set('n', 'gK', function()
   local state = (config.virtual_text and 1) or (config.virtual_lines and 2) or 0
   local next_state = (state + 1) % 3
 
-  vim.diagnostic.config({
+  vim.diagnostic.config {
     virtual_text = next_state == 1,
-    virtual_lines = next_state == 2
-  })
+    virtual_lines = next_state == 2,
+  }
 end, { desc = 'Cycle diagnostic display modes' })
-
 
 -- Plugins
 
@@ -138,13 +137,13 @@ end
 local rtp = vim.opt.rtp
 rtp:prepend(lazypath)
 
-require('lazy').setup({
+require('lazy').setup {
   {
     'nordtheme/vim',
     priority = 1000,
     config = function()
       vim.cmd [[colorscheme nord]]
-    end
+    end,
   },
   'lewis6991/gitsigns.nvim',
   -- Fuzzy Finder (files, lsp, etc)
@@ -179,7 +178,7 @@ require('lazy').setup({
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
 
-      local builtin = require('telescope.builtin')
+      local builtin = require 'telescope.builtin'
 
       -- File finding
       vim.keymap.set('n', '<C-p>', builtin.git_files, {})
@@ -206,7 +205,7 @@ require('lazy').setup({
   {
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
-      'nvim-treesitter/nvim-treesitter-textobjects'
+      'nvim-treesitter/nvim-treesitter-textobjects',
     },
     branch = 'master',
     build = ':TSUpdate',
@@ -233,16 +232,16 @@ require('lazy').setup({
         'typescript',
         'vim',
         'vimdoc',
-        'yaml'
+        'yaml',
       },
       auto_install = false,
       incremental_selection = {
         enable = true,
         keymaps = {
-          init_selection = ",",        -- maps in normal mode to init the node/scope selection with space
-          node_incremental = ",",      -- increment to the upper named parent
-          node_decremental = "<bs>",   -- decrement to the previous node
-          scope_incremental = "<tab>", -- increment to the upper scope
+          init_selection = ',', -- maps in normal mode to init the node/scope selection with space
+          node_incremental = ',', -- increment to the upper named parent
+          node_decremental = '<bs>', -- decrement to the previous node
+          scope_incremental = '<tab>', -- increment to the upper scope
         },
       },
       highlight = {
@@ -283,22 +282,22 @@ require('lazy').setup({
   },
   -- Show current context
   {
-    "nvim-treesitter/nvim-treesitter-context",
-    dependencies = "nvim-treesitter",
+    'nvim-treesitter/nvim-treesitter-context',
+    dependencies = 'nvim-treesitter',
     config = function()
-      require("treesitter-context").setup({
+      require('treesitter-context').setup {
         enable = true,
         multiwindow = false,
         max_lines = 0,
         min_window_height = 0,
         line_numbers = true,
         multiline_threshold = 20,
-        trim_scope = "outer",
-        mode = "cursor",
+        trim_scope = 'outer',
+        mode = 'cursor',
         separator = nil,
         zindex = 20,
         on_attach = nil,
-      })
+      }
     end,
   },
   {
@@ -310,9 +309,9 @@ require('lazy').setup({
       'hrsh7th/cmp-path',
     },
     config = function()
-      local cmp = require('cmp')
+      local cmp = require 'cmp'
 
-      cmp.setup({
+      cmp.setup {
         snippet = {
           expand = function(args)
             vim.snippet.expand(args.body)
@@ -322,37 +321,37 @@ require('lazy').setup({
           expandable_indicator = true,
           format = function(entry, item)
             local menu = {
-              nvim_lsp = "[LSP]",
-              buffer = "[buffer]",
-              path = "[path]"
+              nvim_lsp = '[LSP]',
+              buffer = '[buffer]',
+              path = '[path]',
             }
             item.menu = menu[entry.source.name]
             return item
-          end
+          end,
         },
-        mapping = cmp.mapping.preset.insert({
+        mapping = cmp.mapping.preset.insert {
           -- completions
           ['<C-n>'] = cmp.mapping.select_next_item(),
           ['<C-p>'] = cmp.mapping.select_prev_item(),
-          ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+          ['<C-y>'] = cmp.mapping.confirm { select = true },
           ['<C-Space>'] = cmp.mapping.complete(),
 
           -- move through snippets
           ['<C-k>'] = cmp.mapping(function(fallback)
-            if vim.snippet.active({ direction = 1 }) then
+            if vim.snippet.active { direction = 1 } then
               vim.snippet.jump(1)
             else
               fallback()
             end
           end, { 'i', 's' }),
           ['<C-j>'] = cmp.mapping(function(fallback)
-            if vim.snippet.active({ direction = -1 }) then
+            if vim.snippet.active { direction = -1 } then
               vim.snippet.jump(-1)
             else
               fallback()
             end
           end, { 'i', 's' }),
-        }),
+        },
         sources = {
           { name = 'nvim_lsp' },
           { name = 'buffer' },
@@ -361,18 +360,31 @@ require('lazy').setup({
         -- performance = {
         --   max_view_entries = 20,
         -- },
-      })
+      }
     end,
-  }
-})
+  },
+  {
+    'stevearc/conform.nvim',
+    config = function()
+      require('conform').setup {
+        formatters_by_ft = {
+          lua = { 'stylua' },
+          python = { 'ruff' },
+          rust = { 'rustfmt' },
+          javascript = { 'prettier' },
+          markdown = { 'prettier' },
+        },
+      }
+    end,
+  },
+}
 
 -- Autocmds
 
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 
-local yank_group = augroup('HighlightYank', {})
-
+local yank_group = augroup('HighlightYank', { clear = true })
 autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
   group = yank_group,
@@ -381,9 +393,19 @@ autocmd('TextYankPost', {
   end,
 })
 
+local format_group = augroup('ConformFormatOnSave', { clear = true })
+autocmd('BufWritePre', {
+  group = format_group,
+  pattern = '*',
+  callback = function(args)
+    require('conform').format { bufnr = args.buf }
+  end,
+})
+
 -- LSP Setup
+local lsp_group = augroup('LSPAttach', { clear = true })
 autocmd('LspAttach', {
-  group = augroup('lsp-attach', { clear = true }),
+  group = lsp_group,
   callback = function(event)
     local map = function(keys, func, desc)
       vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
@@ -394,8 +416,12 @@ autocmd('LspAttach', {
     map('gi', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
     map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
     map('gt', vim.lsp.buf.type_definition, '[G]oto [T]ype Definition')
-    map('[d', function() vim.diagnostic.jump({ count = -1 }) end, 'Previous Diagnostic')
-    map(']d', function() vim.diagnostic.jump({ count = 1 }) end, 'Next Diagnostic')
+    map('[d', function()
+      vim.diagnostic.jump { count = -1 }
+    end, 'Previous Diagnostic')
+    map(']d', function()
+      vim.diagnostic.jump { count = 1 }
+    end, 'Next Diagnostic')
 
     map('K', vim.lsp.buf.hover, 'Hover Documentation')
 
@@ -418,7 +444,8 @@ autocmd('LspAttach', {
 })
 
 local servers = {
-  'clangd','lua_ls'
+  'clangd',
+  'lua_ls',
 }
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
