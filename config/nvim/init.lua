@@ -148,6 +148,7 @@ require('lazy').setup {
   {
     'nvim-telescope/telescope.nvim',
     event = 'VimEnter',
+    version = '0.2.*',
     dependencies = {
       'nvim-lua/plenary.nvim',
       {
@@ -205,7 +206,7 @@ require('lazy').setup {
   {
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
-      'nvim-treesitter/nvim-treesitter-textobjects',
+      { 'nvim-treesitter/nvim-treesitter-textobjects', branch = 'master' },
     },
     branch = 'master',
     build = ':TSUpdate',
@@ -252,6 +253,25 @@ require('lazy').setup {
         enable = true,
       },
       textobjects = {
+        select = {
+          enable = true,
+          lookahead = true,
+          keymaps = {
+            ['aa'] = '@parameter.outer',
+            ['ia'] = '@parameter.inner',
+            ['af'] = '@function.outer',
+            ['if'] = '@function.inner',
+            ['ac'] = '@class.outer',
+            ['ic'] = '@class.inner',
+            ['iB'] = '@block.inner',
+            ['aB'] = '@block.outer',
+          },
+          selection_modes = {
+            ['@parameter.outer'] = 'v', -- charwise
+            ['@function.outer'] = 'V', -- linewise
+            ['@class.outer'] = '<c-v>', -- blockwise
+          },
+        },
         move = {
           enable = true,
           set_jumps = true,
@@ -275,6 +295,15 @@ require('lazy').setup {
           },
           swap_previous = {
             ['<leader>sp'] = '@parameter.inner',
+          },
+        },
+        lsp_interop = {
+          enable = true,
+          border = 'none',
+          floating_preview_opts = {},
+          peek_definition_code = {
+            ['<leader>df'] = '@function.outer',
+            ['<leader>dF'] = '@class.outer',
           },
         },
       },
