@@ -87,7 +87,10 @@ vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true })
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+vim.keymap.set('n', '<leader>d', vim.diagnostic.setloclist, { desc = 'Open [D]iagnostic quickfix list' })
+
+vim.keymap.set('n', '[q', ':cprev<CR>', { desc = 'Previous quickfix item' })
+vim.keymap.set('n', ']q', ':cnext<CR>', { desc = 'Next quickfix item' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -125,6 +128,16 @@ vim.keymap.set('n', 'gK', function()
     virtual_lines = next_state == 2,
   }
 end, { desc = 'Cycle diagnostic display modes' })
+
+vim.keymap.set('n', '<leader>q', function()
+  for _, win in ipairs(vim.fn.getwininfo()) do
+    if win.quickfix == 1 then
+      vim.cmd 'cclose'
+      return
+    end
+  end
+  vim.cmd 'copen'
+end, { desc = 'Toggle quickfix' })
 
 -- Plugins
 
