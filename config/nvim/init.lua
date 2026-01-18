@@ -18,12 +18,16 @@ vim.o.breakindent = true
 vim.o.signcolumn = 'yes'
 vim.o.inccommand = 'split'
 vim.o.cursorline = true
-vim.opt.colorcolumn = '80'
+vim.opt.colorcolumn = '88'
 vim.o.scrolloff = 8
 vim.o.splitright = true
 vim.o.splitbelow = true
 vim.o.termguicolors = true
 vim.o.updatetime = 250
+vim.o.foldmethod = 'expr'
+vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
+vim.o.foldenable = false -- Don't fold by default when opening files
+vim.o.foldlevel = 99 -- Open all folds by default
 
 vim.g.netrw_banner = 0
 
@@ -36,7 +40,8 @@ if vim.fn.getenv 'TERM_PROGRAM' == 'ghostty' then
   vim.opt.titlestring = "nvim: %{expand('%:t')}"
 end
 
-vim.opt.completeopt:append { 'menuone', 'noselect', 'popup', 'fuzzy' }
+-- native completions
+-- vim.opt.completeopt:append { 'menuone', 'noselect', 'popup', 'fuzzy' }
 vim.diagnostic.config { virtual_text = true }
 
 vim.filetype.add {
@@ -239,8 +244,8 @@ require('lazy').setup {
       incremental_selection = {
         enable = true,
         keymaps = {
-          init_selection = ',', -- maps in normal mode to init the node/scope selection with space
-          node_incremental = ',', -- increment to the upper named parent
+          init_selection = '<CR>', -- maps in normal mode to init the node/scope selection with space
+          node_incremental = '<CR>', -- increment to the upper named parent
           node_decremental = '<bs>', -- decrement to the previous node
           scope_incremental = '<tab>', -- increment to the upper scope
         },
@@ -394,6 +399,7 @@ require('lazy').setup {
   },
   {
     'stevearc/conform.nvim',
+    tag = 'v9.1.0',
     config = function()
       local conform = require 'conform'
 
@@ -415,6 +421,7 @@ require('lazy').setup {
   {
     'mbbill/undotree',
     config = function()
+      vim.g.undotree_SetFocusWhenToggle = 1
       vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { desc = 'Toggle undotree' })
     end,
   },
@@ -440,6 +447,18 @@ autocmd('BufWritePre', {
   pattern = '*',
   callback = function(args)
     require('conform').format { bufnr = args.buf }
+  end,
+})
+
+local cursor_group = augroup('RememberCursor', { clear = true })
+autocmd('BufReadPost', {
+  group = cursor_group,
+  callback = function()
+    local mark = vim.api.nvim_buf_get_mark(0, '"')
+    local lcount = vim.api.nvim_buf_line_count(0)
+    if mark[1] > 0 and mark[1] <= lcount then
+      pcall(vim.api.nvim_win_set_cursor, 0, mark)
+    end
   end,
 })
 
