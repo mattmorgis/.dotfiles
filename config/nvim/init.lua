@@ -442,7 +442,7 @@ require('lazy').setup {
       }
 
       vim.keymap.set('n', '<leader>f', function()
-        conform.format { async = true, lsp_fallback = true }
+        conform.format { async = true }
       end, { desc = '[F]ormat' })
     end,
   },
