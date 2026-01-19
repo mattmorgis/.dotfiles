@@ -87,7 +87,7 @@ vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true })
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '<leader>d', vim.diagnostic.setloclist, { desc = 'Open [D]iagnostic quickfix list' })
+vim.keymap.set('n', '<leader>dl', vim.diagnostic.setloclist, { desc = 'Open [D]iagnostic quickfix list' })
 
 vim.keymap.set('n', '[q', ':cprev<CR>', { desc = 'Previous quickfix item' })
 vim.keymap.set('n', ']q', ':cnext<CR>', { desc = 'Next quickfix item' })
