@@ -21,7 +21,7 @@ vim.o.cursorline = true
 vim.opt.colorcolumn = '88'
 vim.o.scrolloff = 8
 vim.o.splitright = true
-vim.o.splitbelow = true
+vim.o.splitbelow = false
 vim.o.termguicolors = true
 vim.o.updatetime = 250
 vim.o.foldmethod = 'expr'
@@ -161,7 +161,22 @@ require('lazy').setup {
       vim.cmd [[colorscheme nord]]
     end,
   },
-  'lewis6991/gitsigns.nvim',
+  {
+    'lewis6991/gitsigns.nvim',
+    config = function()
+      require('gitsigns').setup()
+      -- keep same as fugitive
+      vim.keymap.set('n', ']c', ':Gitsigns next_hunk<CR>', { desc = 'Next git change' })
+      vim.keymap.set('n', '[c', ':Gitsigns prev_hunk<CR>', { desc = 'Previous git change' })
+
+      vim.keymap.set('n', '<leader>hs', ':Gitsigns stage_hunk<CR>', { desc = '[H]unk [S]tage' })
+      vim.keymap.set('n', '<leader>hr', ':Gitsigns reset_hunk<CR>', { desc = '[H]unk [R]eset' })
+      vim.keymap.set('n', '<leader>hu', ':Gitsigns undo_stage_hunk<CR>', { desc = '[H]unk [U]ndo stage' })
+      vim.keymap.set('n', '<leader>hp', ':Gitsigns preview_hunk<CR>', { desc = '[H]unk [P]review' })
+
+      vim.keymap.set('n', '<leader>gB', ':Gitsigns toggle_current_line_blame<CR>', { desc = '[G]it [B]lame toggle' })
+    end,
+  },
   -- Fuzzy Finder (files, lsp, etc)
   {
     'nvim-telescope/telescope.nvim',
@@ -438,6 +453,16 @@ require('lazy').setup {
       vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { desc = 'Toggle undotree' })
     end,
   },
+  {
+    'tpope/vim-fugitive',
+    config = function()
+      vim.keymap.set('n', '<leader>gg', vim.cmd.Git, { desc = 'Git status' })
+      vim.keymap.set('n', '<leader>gd', ':Gvdiffsplit<CR>', { desc = 'Git diff' })
+      vim.keymap.set('n', '<leader>gp', ':Git push<CR>', { desc = 'Git push' })
+      vim.keymap.set('n', '<leader>gP', ':Git pull<CR>', { desc = 'Git pull' })
+      vim.keymap.set('n', '<leader>gl', ':Git log<CR>', { desc = 'Git log' })
+    end,
+  },
 }
 
 -- Autocmds
@@ -488,7 +513,7 @@ autocmd('LspAttach', {
     map('gr', vim.lsp.buf.references, '[G]oto [R]eferences')
     map('gi', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
     map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-    map('gt', vim.lsp.buf.type_definition, '[G]oto [T]ype Definition')
+    map('gT', vim.lsp.buf.type_definition, '[G]oto [T]ype Definition')
     map('[d', function()
       vim.diagnostic.jump { count = -1 }
     end, 'Previous Diagnostic')
