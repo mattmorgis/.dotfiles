@@ -204,6 +204,18 @@ require('lazy').setup {
 
       -- Text search
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
+      vim.keymap.set('n', '<leader>sG', function()
+        builtin.live_grep {
+          additional_args = function()
+            return {
+              '--no-ignore',
+              '--hidden',
+              '--glob',
+              '!.git/*',
+            }
+          end,
+        }
+      end, { desc = '[S]earch by [G]rep (include ignored)' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
 
