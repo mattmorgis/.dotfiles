@@ -161,22 +161,6 @@ require('lazy').setup {
       vim.cmd [[colorscheme nord]]
     end,
   },
-  {
-    'lewis6991/gitsigns.nvim',
-    config = function()
-      require('gitsigns').setup()
-      -- keep same as fugitive
-      vim.keymap.set('n', ']c', ':Gitsigns next_hunk<CR>', { desc = 'Next git change' })
-      vim.keymap.set('n', '[c', ':Gitsigns prev_hunk<CR>', { desc = 'Previous git change' })
-
-      vim.keymap.set('n', '<leader>hs', ':Gitsigns stage_hunk<CR>', { desc = '[H]unk [S]tage' })
-      vim.keymap.set('n', '<leader>hr', ':Gitsigns reset_hunk<CR>', { desc = '[H]unk [R]eset' })
-      vim.keymap.set('n', '<leader>hu', ':Gitsigns undo_stage_hunk<CR>', { desc = '[H]unk [U]ndo stage' })
-      vim.keymap.set('n', '<leader>hp', ':Gitsigns preview_hunk<CR>', { desc = '[H]unk [P]review' })
-
-      vim.keymap.set('n', '<leader>gB', ':Gitsigns toggle_current_line_blame<CR>', { desc = '[G]it [B]lame toggle' })
-    end,
-  },
   -- Fuzzy Finder (files, lsp, etc)
   {
     'nvim-telescope/telescope.nvim',
@@ -226,7 +210,7 @@ require('lazy').setup {
       -- Git operations
       vim.keymap.set('n', '<leader>gb', builtin.git_branches, { desc = '[G]it [B]ranches' })
       vim.keymap.set('n', '<leader>gc', builtin.git_commits, { desc = '[G]it [C]ommits' })
-      vim.keymap.set('n', '<leader>gs', builtin.git_status, { desc = '[G]it [S]tatus' })
+      -- vim.keymap.set('n', '<leader>gs', builtin.git_status, { desc = '[G]it [S]tatus' })
 
       -- Others
       vim.keymap.set('n', '<leader>sb', builtin.buffers, { desc = '[S]earch [B]uffers' })
@@ -454,9 +438,37 @@ require('lazy').setup {
     end,
   },
   {
+    'lewis6991/gitsigns.nvim',
+    config = function()
+      require('gitsigns').setup {
+        on_attach = function(bufnr)
+          local gitsigns = require 'gitsigns'
+          local function map(mode, l, r, opts)
+            opts = opts or {}
+            opts.buffer = bufnr
+            vim.keymap.set(mode, l, r, opts)
+          end
+
+          map('n', ']h', gitsigns.next_hunk, { desc = 'Next git change' })
+          map('n', '[h', gitsigns.prev_hunk, { desc = 'Previous git change' })
+
+          map('n', '<leader>hs', gitsigns.stage_hunk, { desc = '[H]unk [S]tage' })
+          map('n', '<leader>hS', gitsigns.stage_buffer, { desc = '[H]unk [S]tage' })
+          map('n', '<leader>hr', gitsigns.reset_hunk, { desc = '[H]unk [R]eset' })
+          map('n', '<leader>hR', gitsigns.reset_buffer, { desc = '[H]unk [R]eset' })
+          map('n', '<leader>hu', gitsigns.undo_stage_hunk, { desc = '[H]unk [U]ndo stage' })
+          map('n', '<leader>hp', gitsigns.preview_hunk, { desc = '[H]unk [P]review' })
+
+          map('n', '<leader>hd', gitsigns.diffthis)
+          map('n', '<leader>gB', gitsigns.toggle_current_line_blame, { desc = '[G]it [B]lame toggle' })
+        end,
+      }
+    end,
+  },
+  {
     'tpope/vim-fugitive',
     config = function()
-      vim.keymap.set('n', '<leader>gg', vim.cmd.Git, { desc = 'Git status' })
+      vim.keymap.set('n', '<leader>gs', vim.cmd.Git, { desc = 'Git status' })
       vim.keymap.set('n', '<leader>gd', ':Gvdiffsplit<CR>', { desc = 'Git diff' })
       vim.keymap.set('n', '<leader>gp', ':Git push<CR>', { desc = 'Git push' })
       vim.keymap.set('n', '<leader>gP', ':Git pull<CR>', { desc = 'Git pull' })
