@@ -176,7 +176,8 @@ require('lazy').setup {
         build = 'make',
       },
       { 'nvim-telescope/telescope-ui-select.nvim' },
-      { 'nvim-telescope/telescope-frecency.nvim' },
+
+      { 'nvim-telescope/telescope-frecency.nvim', tag = '1.2.2' },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -345,6 +346,7 @@ require('lazy').setup {
   {
     'nvim-treesitter/nvim-treesitter-context',
     dependencies = 'nvim-treesitter',
+    tag = 'v1.0.0',
     config = function()
       require('treesitter-context').setup {
         enable = true,
@@ -369,6 +371,7 @@ require('lazy').setup {
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-path',
     },
+    tag = 'v0.0.2',
     config = function()
       local cmp = require 'cmp'
 
@@ -454,6 +457,7 @@ require('lazy').setup {
   },
   {
     'lewis6991/gitsigns.nvim',
+    tag = 'v2.0.0',
     config = function()
       require('gitsigns').setup {
         on_attach = function(bufnr)
