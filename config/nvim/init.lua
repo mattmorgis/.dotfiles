@@ -155,7 +155,10 @@ rtp:prepend(lazypath)
 
 require('lazy').setup {
   {
-    'nordtheme/vim',
+    -- dir = '/Users/matt/Developer/nord.nvim',
+    -- name = 'nord-local',
+    'mattmorgis/nord.nvim',
+    lazy = false,
     priority = 1000,
     config = function()
       vim.cmd [[colorscheme nord]]
