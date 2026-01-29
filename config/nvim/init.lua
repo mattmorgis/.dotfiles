@@ -572,6 +572,7 @@ autocmd('LspAttach', {
 local servers = {
   'clangd',
   'lua_ls',
+  'ruff',
   'ty',
 }
 
