@@ -432,6 +432,7 @@ require('lazy').setup {
     tag = 'v9.1.0',
     config = function()
       local conform = require 'conform'
+      local venv = require 'python_venv'
 
       conform.setup {
         formatters_by_ft = {
@@ -440,6 +441,12 @@ require('lazy').setup {
           rust = { 'rustfmt' },
           javascript = { 'prettier' },
           markdown = { 'prettier' },
+        },
+        formatters = {
+          ruff = function(bufnr)
+            local root_dir = venv.root_dir(vim.api.nvim_buf_get_name(bufnr))
+            return { command = venv.resolve(root_dir, 'ruff') }
+          end,
         },
       }
 
