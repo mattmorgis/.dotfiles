@@ -572,6 +572,7 @@ autocmd('LspAttach', {
 local servers = {
   'clangd',
   'lua_ls',
+  'ty',
 }
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
