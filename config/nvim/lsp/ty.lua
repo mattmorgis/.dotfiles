@@ -1,3 +1,5 @@
+-- uv tool install ty@latest
+
 local function ty_cmd(root_dir)
   if root_dir then
     local venvs = { '.venv', 'venv', 'env' }
