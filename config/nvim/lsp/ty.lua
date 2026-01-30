@@ -1,11 +1,5 @@
-local venv = require 'python_venv'
-
 return {
-  -- See :help vim.lsp.ClientConfig and :help vim.lsp.rpc.start
-  cmd = function(dispatchers, config)
-    local cmd = venv.resolve_cmd(config.root_dir, 'ty', { 'server' })
-    return vim.lsp.rpc.start(cmd, dispatchers)
-  end,
+  cmd = { 'ty', 'server' },
   filetypes = { 'python' },
-  root_markers = venv.root_markers,
+  root_markers = { 'pyproject.toml', 'setup.cfg', 'setup.py', 'requirements.txt', '.git' },
 }
