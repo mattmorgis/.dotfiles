@@ -155,7 +155,7 @@ rtp:prepend(lazypath)
 
 require('lazy').setup {
   {
-    -- dir = '/Users/matt/Developer/gbprod-nord.nvim',
+    -- dir = '/Users/matt/Developer/nord.nvim',
     'mattmorgis/nord.nvim',
     lazy = false,
     priority = 1000,
