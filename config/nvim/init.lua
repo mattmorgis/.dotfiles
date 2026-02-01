@@ -155,13 +155,13 @@ rtp:prepend(lazypath)
 
 require('lazy').setup {
   {
-    -- dir = '/Users/matt/Developer/nord.nvim',
-    -- name = 'nord-local',
+    -- dir = '/Users/matt/Developer/gbprod-nord.nvim',
     'mattmorgis/nord.nvim',
     lazy = false,
     priority = 1000,
     config = function()
-      vim.cmd [[colorscheme nord]]
+      require('nord').setup {}
+      vim.cmd.colorscheme 'nord'
     end,
   },
   -- Fuzzy Finder (files, lsp, etc)
