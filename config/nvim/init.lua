@@ -118,6 +118,13 @@ vim.keymap.set('n', '<Leader>fp', function()
   print('Copied to clipboard: ' .. path)
 end, { silent = true })
 
+-- Copy current absoulte [f]ile[P]ath to system clipboard
+vim.keymap.set('n', '<Leader>fP', function()
+  local path = vim.fn.expand '%:p'
+  vim.fn.setreg('+', path)
+  print('Copied to clipboard: ' .. path)
+end, { silent = true })
+
 vim.keymap.set('n', 'gK', function()
   local config = vim.diagnostic.config() or {}
   local state = (config.virtual_text and 1) or (config.virtual_lines and 2) or 0
