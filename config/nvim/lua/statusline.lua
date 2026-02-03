@@ -41,11 +41,109 @@ local function filename(buf, fancy)
   return string.format('%s %%<%s%s%s %%*', parent_hl, parent or '', tail_hl, tail)
 end
 
-local function branch()
-  if vim.fn.exists '*FugitiveStatusline' ~= 1 then
+local git_state = {
+  by_root = {},
+  inflight = {},
+  timers = {},
+}
+
+local function git_root_for_buf(buf)
+  local name = vim.api.nvim_buf_get_name(buf)
+  if name == '' then
+    return vim.fn.getcwd(0)
+  end
+  local root = vim.fs.root(name, { '.git' })
+  return root or vim.fn.getcwd(0)
+end
+
+local function parse_git_status(output)
+  if not output or output == '' then
     return ''
   end
-  local s = vim.fn.FugitiveStatusline()
+
+  local lines = vim.split(output, '\n', { trimempty = true })
+  if #lines == 0 then
+    return ''
+  end
+
+  local head = lines[1]
+  if not vim.startswith(head, '## ') then
+    return ''
+  end
+
+  local branch_info = head:sub(4)
+  local branch = branch_info
+  local ahead = tonumber(branch_info:match('ahead (%d+)') or '')
+  local behind = tonumber(branch_info:match('behind (%d+)') or '')
+
+  local local_branch = branch_info:match('^([^%.]+)%.%.%.') or branch_info:match('^([^%s]+)')
+  if local_branch and local_branch ~= '' then
+    branch = local_branch
+  end
+
+  if branch:match('^HEAD') then
+    branch = 'detached'
+  end
+
+  local dirty = (#lines > 1)
+
+  local parts = { branch .. (dirty and '*' or '') }
+  if ahead and ahead > 0 then
+    parts[#parts + 1] = '↑' .. ahead
+  end
+  if behind and behind > 0 then
+    parts[#parts + 1] = '↓' .. behind
+  end
+
+  return table.concat(parts, ' ')
+end
+
+local function refresh_git_status(root)
+  if git_state.inflight[root] then
+    return
+  end
+  git_state.inflight[root] = true
+
+  vim.system({ 'git', 'status', '--porcelain=v1', '-b' }, { cwd = root }, function(result)
+    git_state.inflight[root] = nil
+
+    if result.code ~= 0 then
+      git_state.by_root[root] = ''
+      return
+    end
+
+    git_state.by_root[root] = parse_git_status(result.stdout or '')
+    vim.schedule(function()
+      vim.cmd('redrawstatus')
+    end)
+  end)
+end
+
+local function ensure_git_status(root)
+  if git_state.by_root[root] == nil then
+    git_state.by_root[root] = ''
+    refresh_git_status(root)
+    return
+  end
+
+  if git_state.timers[root] then
+    return
+  end
+
+  local timer = vim.uv.new_timer()
+  git_state.timers[root] = timer
+  timer:start(200, 0, function()
+    timer:stop()
+    timer:close()
+    git_state.timers[root] = nil
+    refresh_git_status(root)
+  end)
+end
+
+local function branch(buf)
+  local root = git_root_for_buf(buf)
+  ensure_git_status(root)
+  local s = git_state.by_root[root] or ''
   return (s ~= '') and (' %s '):format(s) or ''
 end
 
