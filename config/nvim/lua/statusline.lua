@@ -50,10 +50,9 @@ local git_state = {
 local function git_root_for_buf(buf)
   local name = vim.api.nvim_buf_get_name(buf)
   if name == '' then
-    return vim.fn.getcwd(0)
+    return vim.fs.root(vim.fn.getcwd(0), { '.git' })
   end
-  local root = vim.fs.root(name, { '.git' })
-  return root or vim.fn.getcwd(0)
+  return vim.fs.root(name, { '.git' })
 end
 
 local function parse_git_status(output)
@@ -142,6 +141,9 @@ end
 
 local function branch(buf)
   local root = git_root_for_buf(buf)
+  if not root then
+    return ''
+  end
   ensure_git_status(root)
   local s = git_state.by_root[root] or ''
   return (s ~= '') and (' %s '):format(s) or ''
