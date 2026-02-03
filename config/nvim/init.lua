@@ -589,3 +589,6 @@ for _, server in ipairs(servers) do
   vim.lsp.config(server, { capabilities = capabilities })
   vim.lsp.enable(server)
 end
+
+-- Statusline / tabline
+require('statusline').setup()
