@@ -32,6 +32,11 @@ local function git_root_for_buf(buf)
   if name == '' then
     return vim.fs.root(vim.fn.getcwd(0), { '.git' })
   end
+
+  if vim.startswith(name, 'fugitive://') then
+    return vim.fs.root(vim.fn.getcwd(0), { '.git' })
+  end
+
   return vim.fs.root(name, { '.git' })
 end
 
