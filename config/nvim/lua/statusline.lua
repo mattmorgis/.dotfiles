@@ -124,7 +124,7 @@ local function build_statusline(is_active)
   local win = vim.fn.win_getid()
   local buf = vim.api.nvim_win_get_buf(win)
   local is_terminal = vim.bo[buf].buftype == 'terminal'
-  local fancy = is_active and (not is_terminal)
+  local fancy = is_active and not is_terminal
   local filename_fancy = fancy
 
   local left = {}

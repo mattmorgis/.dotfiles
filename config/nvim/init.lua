@@ -18,7 +18,7 @@ vim.o.breakindent = true
 vim.o.signcolumn = 'yes'
 vim.o.inccommand = 'split'
 vim.o.cursorline = true
-vim.opt.colorcolumn = '88'
+vim.opt.colorcolumn = '89'
 vim.o.scrolloff = 8
 vim.o.splitright = true
 vim.o.splitbelow = false
@@ -87,7 +87,12 @@ vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true })
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '<leader>dl', vim.diagnostic.setloclist, { desc = 'Open [D]iagnostic quickfix list' })
+vim.keymap.set(
+  'n',
+  '<leader>dl',
+  vim.diagnostic.setloclist,
+  { desc = 'Open [D]iagnostic quickfix list' }
+)
 
 vim.keymap.set('n', '[q', ':cprev<CR>', { desc = 'Previous quickfix item' })
 vim.keymap.set('n', ']q', ':cnext<CR>', { desc = 'Next quickfix item' })
@@ -151,7 +156,14 @@ end, { desc = 'Toggle quickfix' })
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
-  local out = vim.fn.system { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath }
+  local out = vim.fn.system {
+    'git',
+    'clone',
+    '--filter=blob:none',
+    '--branch=stable',
+    lazyrepo,
+    lazypath,
+  }
   if vim.v.shell_error ~= 0 then
     error('Error cloning lazy.nvim:\n' .. out)
   end
@@ -211,10 +223,20 @@ require('lazy').setup {
 
       -- File finding
       vim.keymap.set('n', '<C-p>', builtin.git_files, {})
-      vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
+      vim.keymap.set(
+        'n',
+        '<leader>sf',
+        builtin.find_files,
+        { desc = '[S]earch [F]iles' }
+      )
 
       -- Text search
-      vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
+      vim.keymap.set(
+        'n',
+        '<leader>sg',
+        builtin.live_grep,
+        { desc = '[S]earch by [G]rep' }
+      )
       vim.keymap.set('n', '<leader>sG', function()
         builtin.live_grep {
           additional_args = function()
@@ -227,19 +249,49 @@ require('lazy').setup {
           end,
         }
       end, { desc = '[S]earch by [G]rep (include ignored)' })
-      vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
+      vim.keymap.set(
+        'n',
+        '<leader>sw',
+        builtin.grep_string,
+        { desc = '[S]earch current [W]ord' }
+      )
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
 
       -- Git operations
-      vim.keymap.set('n', '<leader>gb', builtin.git_branches, { desc = '[G]it [B]ranches' })
-      vim.keymap.set('n', '<leader>gc', builtin.git_commits, { desc = '[G]it [C]ommits' })
+      vim.keymap.set(
+        'n',
+        '<leader>gb',
+        builtin.git_branches,
+        { desc = '[G]it [B]ranches' }
+      )
+      vim.keymap.set(
+        'n',
+        '<leader>gc',
+        builtin.git_commits,
+        { desc = '[G]it [C]ommits' }
+      )
       -- vim.keymap.set('n', '<leader>gs', builtin.git_status, { desc = '[G]it [S]tatus' })
 
       -- Others
-      vim.keymap.set('n', '<leader>sb', builtin.buffers, { desc = '[S]earch [B]uffers' })
+      vim.keymap.set(
+        'n',
+        '<leader>sb',
+        builtin.buffers,
+        { desc = '[S]earch [B]uffers' }
+      )
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
-      vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
-      vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
+      vim.keymap.set(
+        'n',
+        '<leader>ss',
+        builtin.builtin,
+        { desc = '[S]earch [S]elect Telescope' }
+      )
+      vim.keymap.set(
+        'n',
+        '<leader>sd',
+        builtin.diagnostics,
+        { desc = '[S]earch [D]iagnostics' }
+      )
     end,
   },
   -- Highlight, edit, and navigate code
@@ -459,7 +511,12 @@ require('lazy').setup {
     'mbbill/undotree',
     config = function()
       vim.g.undotree_SetFocusWhenToggle = 1
-      vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { desc = 'Toggle undotree' })
+      vim.keymap.set(
+        'n',
+        '<leader>u',
+        vim.cmd.UndotreeToggle,
+        { desc = 'Toggle undotree' }
+      )
     end,
   },
   {
@@ -482,11 +539,21 @@ require('lazy').setup {
           map('n', '<leader>hS', gitsigns.stage_buffer, { desc = '[H]unk [S]tage' })
           map('n', '<leader>hr', gitsigns.reset_hunk, { desc = '[H]unk [R]eset' })
           map('n', '<leader>hR', gitsigns.reset_buffer, { desc = '[H]unk [R]eset' })
-          map('n', '<leader>hu', gitsigns.undo_stage_hunk, { desc = '[H]unk [U]ndo stage' })
+          map(
+            'n',
+            '<leader>hu',
+            gitsigns.undo_stage_hunk,
+            { desc = '[H]unk [U]ndo stage' }
+          )
           map('n', '<leader>hp', gitsigns.preview_hunk, { desc = '[H]unk [P]review' })
 
           map('n', '<leader>hd', gitsigns.diffthis)
-          map('n', '<leader>gB', gitsigns.toggle_current_line_blame, { desc = '[G]it [B]lame toggle' })
+          map(
+            'n',
+            '<leader>gB',
+            gitsigns.toggle_current_line_blame,
+            { desc = '[G]it [B]lame toggle' }
+          )
         end,
       }
     end,
