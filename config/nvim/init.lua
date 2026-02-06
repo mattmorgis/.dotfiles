@@ -183,6 +183,9 @@ require('lazy').setup {
       vim.cmd.colorscheme 'nord'
     end,
   },
+  {
+    'mattmorgis/git-statusline.nvim',
+  },
   -- Fuzzy Finder (files, lsp, etc)
   {
     'nvim-telescope/telescope.nvim',
