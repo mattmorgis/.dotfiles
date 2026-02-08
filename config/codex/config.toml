@@ -1,0 +1,18 @@
+model_reasoning_effort = "medium"
+model_reasoning_summary = "auto"
+show_raw_agent_reasoning = true
+
+personality = "none"
+file_opener = "none"
+web_search = "live"
+
+sandbox_mode = "workspace-write"
+approval_policy = "on-request"
+
+[sandbox_workspace_write]
+  network_access = true
+  writeable_roots = ["$HOME/.local/bin/uv", "$HOME/.local/bin/uvx"]
+
+[shell_environment_policy]
+  "inherit" = "all"
+  ignore_default_excludes = true
