@@ -21,3 +21,4 @@ cursor-style-blink = true
 cursor-style = block
 adjust-cursor-thickness = 100%
 
+bell-features = attention,title

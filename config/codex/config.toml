@@ -9,6 +9,12 @@ web_search = "live"
 sandbox_mode = "workspace-write"
 approval_policy = "on-request"
 
+# tui.notifications = false
+
+[tui]
+notifications = ["agent-turn-complete", "approval-requested"]
+notification_method = "bel"
+
 [sandbox_workspace_write]
   network_access = true
   writeable_roots = ["$HOME/.local/bin/uv", "$HOME/.local/bin/uvx"]
