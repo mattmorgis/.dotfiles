@@ -16,10 +16,11 @@ if [[ ! -f "${base_config}" ]]; then
 fi
 
 # Start with the base config, expanding $HOME
-sed "s|\\$HOME|${HOME}|g" "${base_config}" > "${tmp_file}"
+sed 's|$HOME|'"${HOME}"'|g' "${base_config}" > "${tmp_file}"
 
 # Append any existing per-project trust blocks.
 if [[ -f "${dest_config}" ]]; then
+  echo "" >> "${tmp_file}"
   awk '
     BEGIN { in_projects = 0 }
     /^\[projects\./ { in_projects = 1; print; next }
