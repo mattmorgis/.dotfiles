@@ -21,6 +21,9 @@ ln -sf "$DOTFILES_DIR/config/aerospace/aerospace.toml" "$HOME/.config/aerospace/
 mkdir -p "$HOME/.config/ghostty"
 ln -sf "$DOTFILES_DIR/config/ghostty/config" "$HOME/.config/ghostty/config"
 
+# tmux
+ln -sf "$DOTFILES_DIR/config/tmux/tmux.conf" "$HOME/.tmux.conf"
+
 # neovim
 ln -s "$DOTFILES_DIR/config/nvim" "$HOME/.config/nvim"
 

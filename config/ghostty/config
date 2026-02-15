@@ -11,10 +11,6 @@ adjust-cell-height = 20%
 shell-integration-features = no-cursor
 
 copy-on-select = clipboard
-
-# window-inherit-working-directory = false
-keybind = shift+enter=text:\n
-
 macos-titlebar-style = tabs
 mouse-hide-while-typing = true
 cursor-style-blink = true
@@ -22,3 +18,43 @@ cursor-style = block
 adjust-cursor-thickness = 100%
 
 bell-features = attention,title
+
+keybind = shift+enter=text:\n
+
+# Tmux window controls (assumes tmux prefix is Ctrl+b)
+keybind = cmd+t=text:\x02\x63
+keybind = cmd+digit1=text:\x02\x31
+keybind = cmd+digit2=text:\x02\x32
+keybind = cmd+digit3=text:\x02\x33
+keybind = cmd+digit4=text:\x02\x34
+keybind = cmd+digit5=text:\x02\x35
+keybind = cmd+digit6=text:\x02\x36
+keybind = cmd+digit7=text:\x02\x37
+keybind = cmd+digit8=text:\x02\x38
+keybind = cmd+digit9=text:\x02\x39
+keybind = shift+cmd+digit1=goto_tab:1
+keybind = shift+cmd+digit2=goto_tab:2
+keybind = shift+cmd+digit3=goto_tab:3
+keybind = shift+cmd+digit4=goto_tab:4
+keybind = shift+cmd+digit5=goto_tab:5
+keybind = shift+cmd+digit6=goto_tab:6
+keybind = shift+cmd+digit7=goto_tab:7
+keybind = shift+cmd+digit8=goto_tab:8
+keybind = shift+cmd+digit9=goto_tab:9
+keybind = cmd+w=text:\x02\x78
+keybind = shift+cmd+backslash=text:\x02\x7c
+keybind = cmd+-=text:\x02\x2d
+keybind = shift+cmd+t=new_tab
+keybind = cmd+k=text:\x0c
+keybind = cmd+h=text:\x02\x68
+keybind = cmd+j=text:\x02\x6a
+keybind = cmd+l=text:\x02\x6c
+keybind = shift+cmd+h=text:\x02\x48
+keybind = shift+cmd+j=text:\x02\x4a
+keybind = shift+cmd+k=text:\x02\x4b
+keybind = shift+cmd+l=text:\x02\x4c
+keybind = cmd+left=text:\x02\x48
+keybind = cmd+down=text:\x02\x4a
+keybind = cmd+up=text:\x02\x4b
+keybind = cmd+right=text:\x02\x4c
+
