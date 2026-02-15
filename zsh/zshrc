@@ -3,6 +3,17 @@ set -o vi
 # Interactive shell configuration
 eval "$(starship init zsh)"
 
+# tmux-sessionizer
+bindkey -s ^f "tmux-sessionizer\n"
+
+# Rename tmux window when running codex
+codex() {
+  if [ -n "$TMUX" ]; then
+    tmux rename-window codex
+  fi
+  command codex "$@"
+}
+
 # Aliases
 alias python=python3
 alias pyc='py_check'

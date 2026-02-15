@@ -10,6 +10,10 @@ ln -sf "$DOTFILES_DIR/zsh/zprofile" "$HOME/.zprofile"
 ln -sf "$DOTFILES_DIR/zsh/zshrc" "$HOME/.zshrc"
 ln -sf "$DOTFILES_DIR/zfunc" "$HOME/.zfunc"
 
+# local bin
+mkdir -p "$HOME/.local/bin"
+ln -sf "$DOTFILES_DIR/scripts/tmux-sessionizer" "$HOME/.local/bin/tmux-sessionizer"
+
 # starship
 ln -sf "$DOTFILES_DIR/config/starship.toml" "$HOME/.config/starship.toml"
 

@@ -86,6 +86,9 @@ vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true })
 -- Clear highlights on search when pressing <Esc> in normal mode
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
+-- tmux-sessionizer
+vim.keymap.set('n', '<C-f>', '<cmd>silent !tmux neww tmux-sessionizer<CR>')
+
 -- Diagnostic keymaps
 vim.keymap.set(
   'n',
