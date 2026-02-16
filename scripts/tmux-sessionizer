@@ -133,13 +133,15 @@ sanity_check() {
 }
 
 switch_to() {
-    maybe_set_ghostty_title "$1"
     if [[ -z $TMUX ]]; then
+        maybe_set_ghostty_title "$1"
         log "attaching to session $1"
         tmux attach-session -t "$1"
     else
         log "switching to session $1"
         tmux switch-client -t "$1"
+        maybe_set_ghostty_title "$1"
+        tmux refresh-client -S
     fi
 }
 
@@ -170,19 +172,12 @@ is_tmux_running() {
 }
 
 maybe_set_ghostty_title() {
-    local target="$1"
-    local session_name="${target%%:*}"
-
     if [[ "${TERM_PROGRAM}" != "ghostty" ]]; then
         return
     fi
 
-    if [[ -z "$session_name" ]]; then
-        return
-    fi
-
-    tmux set-option -t "$session_name" set-titles on
-    tmux set-option -t "$session_name" set-titles-string "tmux: #S"
+    tmux set-option -g set-titles on
+    tmux set-option -g set-titles-string "tmux: #S"
 }
 
 init_pane_cache() {
