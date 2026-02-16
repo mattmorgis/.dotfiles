@@ -114,6 +114,37 @@ local function formatter_info(buf)
   return string.format(' fmt:%s ', table.concat(names, ','))
 end
 
+local function mode_info(is_active, is_terminal)
+  if not is_active or is_terminal then
+    return ''
+  end
+
+  local mode = vim.api.nvim_get_mode().mode
+  local map = {
+    n = 'N',
+    i = 'I',
+    v = 'V',
+    V = 'V',
+    R = 'R',
+    c = 'C',
+    t = 'T',
+    s = 'S',
+    S = 'S',
+  }
+  local label = map[mode]
+  if not label then
+    local first = mode:sub(1, 1)
+    if first ~= '' then
+      label = (string.byte(first) == 22) and 'V' or first:upper()
+    end
+  end
+  if not label then
+    return ''
+  end
+
+  return string.format('%%7* %s %%*', label)
+end
+
 local function add_part(dst, value)
   if value ~= '' then
     dst[#dst + 1] = value
@@ -129,6 +160,7 @@ local function build_statusline(is_active)
 
   local left = {}
   add_part(left, (vim.v.this_session == '' and '' or ' $'))
+  add_part(left, mode_info(is_active, is_terminal))
   add_part(left, filename(buf, filename_fancy))
   add_part(left, branch(buf, fancy))
   add_part(left, (vim.bo[buf].readonly and '%r ' or ''))
