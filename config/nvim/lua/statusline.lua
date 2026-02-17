@@ -1,7 +1,8 @@
 local M = {}
 
 local function diagnostics()
-  local diags = vim.diagnostic.get(0, { severity = { min = vim.diagnostic.severity.WARN } })
+  local diags =
+    vim.diagnostic.get(0, { severity = { min = vim.diagnostic.severity.WARN } })
   if #diags == 0 then
     return ''
   end
@@ -89,7 +90,8 @@ local function filetype_info(buf)
     return ''
   end
   local clients = lsp_names(buf)
-  return (clients ~= '') and string.format(' %s/%s ', ft, clients) or string.format(' %s ', ft)
+  return (clients ~= '') and string.format(' %s/%s ', ft, clients)
+    or string.format(' %s ', ft)
 end
 
 local function formatter_info(buf)
@@ -160,7 +162,6 @@ local function build_statusline(is_active)
 
   local left = {}
   add_part(left, (vim.v.this_session == '' and '' or ' $'))
-  add_part(left, mode_info(is_active, is_terminal))
   add_part(left, filename(buf, filename_fancy))
   add_part(left, branch(buf, fancy))
   add_part(left, (vim.bo[buf].readonly and '%r ' or ''))
