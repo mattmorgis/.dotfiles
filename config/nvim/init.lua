@@ -69,6 +69,7 @@ vim.keymap.set({ 'n', 'v' }, '<leader>d', '"_d', { desc = 'delete without yankin
 
 -- macOS
 vim.keymap.set('v', '<D-c>', '"+y', { desc = 'copy to system clipboard' })
+vim.keymap.set('v', '<M-c>', '"+y', { desc = 'copy to system clipboard (tmux)' })
 vim.keymap.set('n', '<D-s>', ':w<CR>', { desc = 'cmd+s to save' })
 vim.keymap.set('i', '<D-s>', '<C-o>:w<CR>', { desc = 'cmd+s to save' })
 
