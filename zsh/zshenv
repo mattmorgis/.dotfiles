@@ -1,3 +1,10 @@
 # Environment variables for all zsh instances
 . "$HOME/.cargo/env"
 . "$HOME/.local/bin/env"
+
+# Machine-local overrides (not tracked)
+if [[ -f "$HOME/.dotfiles/.zshenv.local" ]]; then
+  . "$HOME/.dotfiles/.zshenv.local"
+elif [[ -f "$HOME/.zshenv.local" ]]; then
+  . "$HOME/.zshenv.local"
+fi
