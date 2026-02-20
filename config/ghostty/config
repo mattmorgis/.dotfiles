@@ -45,6 +45,7 @@ keybind = cmd+w=text:\x02\x78
 keybind = shift+cmd+backslash=text:\x02\x7c
 keybind = cmd+-=text:\x02\x2d
 keybind = shift+cmd+t=new_tab
+keybind = cmd+c=text:\x1bc
 keybind = cmd+k=text:\x0c
 keybind = cmd+h=text:\x02\x68
 keybind = cmd+j=text:\x02\x6a
@@ -57,4 +58,3 @@ keybind = cmd+left=text:\x02\x48
 keybind = cmd+down=text:\x02\x4a
 keybind = cmd+up=text:\x02\x4b
 keybind = cmd+right=text:\x02\x4c
-
