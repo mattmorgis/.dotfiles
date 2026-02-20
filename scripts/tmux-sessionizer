@@ -350,6 +350,7 @@ create_session() {
     tmux new-session -ds "$selected_name" -c "$selected" -n nvim "nvim"
     hydrate "$selected_name" "$selected"
     tmux neww -dt "$selected_name":2 -c "$selected" -n codex "codex"
+    tmux neww -dt "$selected_name":3 -c "$selected" -n scratch
 }
 
 if ! is_tmux_running; then
